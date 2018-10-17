@@ -1,0 +1,1 @@
+All the protocol buffer files goes into this directory.
