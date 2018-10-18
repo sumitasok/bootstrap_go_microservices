@@ -1,8 +1,10 @@
 package main
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type Product struct {
@@ -12,7 +14,12 @@ type Product struct {
 }
 
 func main() {
-	db, err := gorm.Open("sqlite3", "test.db")
+	// Docker need time to startup the database for the app to connect
+	// this needs to be hanlded in a better way.
+	// https://docs.docker.com/compose/startup-order/
+	time.Sleep(2 * time.Second)
+
+	db, err := gorm.Open("postgres", "host=db port=5432 user=in_user dbname=in_db password=in_password sslmode=disable")
 	if err != nil {
 		print(err.Error())
 		panic("failed to connect database")
