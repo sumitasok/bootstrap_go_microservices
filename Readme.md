@@ -13,3 +13,17 @@ to generate the go file:
 docker run --rm -v $(pwd):$(pwd) -w $(pwd) znly/protoc --go_out=. -I. file-to-convert.proto
 ```
 
+Docker Compose
+
+`.env.samples` file holds the configs for your docker compose/deployment.
+copy this file to `.env` and edit it to satisfy your setup.
+any new ENV VAR+VAL should be updated in the .env.samples file, and copied back to .env
+.env is git ignored. Do not check in .env file or your local configs into repo.
+
+run:
+
+```
+docker-compose up
+```
+
+After updating .env file with your configs.
