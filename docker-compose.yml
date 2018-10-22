@@ -22,9 +22,21 @@ services:
     ports:
       - 8080:8080
 
-  web:
-    build: .
+  web_server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
     ports:
       - "9000:9000"
     depends_on:
       - db
+
+  web_client:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+    ports:
+      - "9001:9001"
+    depends_on:
+      - db
+      - web_server
