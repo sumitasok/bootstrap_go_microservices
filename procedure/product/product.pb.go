@@ -11,7 +11,7 @@ It has these top-level messages:
 	ProductRequest
 	ProductResponse
 */
-package data
+package product
 
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
