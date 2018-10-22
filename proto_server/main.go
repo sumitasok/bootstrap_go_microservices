@@ -1,7 +1,7 @@
 package main
 
 import (
-	productServer "app/data/product"
+	productServer "app/procedure/product"
 	"log"
 	"net"
 

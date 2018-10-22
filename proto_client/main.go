@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "app/data/product"
+	pb "app/procedure/product"
 	"log"
 	"time"
 
