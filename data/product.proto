@@ -1,0 +1,16 @@
+syntax = "proto3";
+package data;
+
+service ProductActor {
+    rpc Create(ProductRequest) returns (ProductResponse) {}
+}
+
+message ProductRequest {
+    string code = 1;
+    uint64 price = 17;
+}
+
+message ProductResponse {
+    string code = 1;
+    uint64 price = 17;
+}

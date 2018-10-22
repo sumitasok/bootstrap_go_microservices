@@ -12,6 +12,9 @@ to generate the go file:
 ```
 docker run --rm -v $(pwd):$(pwd) -w $(pwd) znly/protoc --go_out=. -I. file-to-convert.proto
 ```
+```
+docker run --rm -v $(pwd):$(pwd) -w $(pwd) znly/protoc --go_out=plugins=grpc:. -I. data/product.proto
+```
 
 Docker Compose
 

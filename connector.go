@@ -1,16 +1,36 @@
 package main
 
 import (
+	// "context"
+	"log"
+	"net"
 	"time"
 
+	"./data"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+)
+
+const (
+	port = ":9091"
 )
 
 type Product struct {
 	gorm.Model
 	Code  string
 	Price uint
+}
+
+// server is used to implement helloworld.GreeterServer.
+type product_server struct{}
+
+// SayHello implements helloworld.GreeterServer
+func (s *product_server) Create(ctx context.Context, in *data.ProductRequest) (*data.ProductResponse, error) {
+	// To-Do: code to create the data.
+	return &data.ProductResponse{Code: "Hello " + in.Code}, nil
 }
 
 func main() {
@@ -42,4 +62,17 @@ func main() {
 
 	// Delete - delete product
 	db.Delete(&product)
+
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer()
+	data.RegisterGreeterServer(s, &product_server)
+	// Register reflection service on gRPC server.
+	reflection.Register(s)
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
