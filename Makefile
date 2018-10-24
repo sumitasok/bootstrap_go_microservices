@@ -31,5 +31,8 @@ force:
 gotools:
 	docker run -it --rm -v `pwd`:/go/src/app gotools $(arg)
 
-make protofile:
+protofile:
 	docker run --rm -v `pwd`:`pwd` -w `pwd` znly/protoc --go_out=plugins=grpc:. -I. $(path)
+
+gitlog:
+	git log --graph --oneline --decorate --all
