@@ -3,7 +3,7 @@
 
 build:
 	{ \
-		docker build -t gotools -f gotools.Dockerfile . ;\
+		docker build -t gotools -f Dockerfiles/gotools.Dockerfile . ;\
 		docker pull znly/protoc ;\
 	}
 
@@ -15,12 +15,12 @@ shell:
 
 # stop the running containers asociated with this app
 stop:
-	@docker ps -a | grep data_access_layer | awk ' {print $1 } ' | xargs docker stop
+	@docker ps -a | awk ' {print $1 } ' | xargs docker stop
 
 # remove the running containers asociated with this app
 # run `make stop` before this.
 rm:
-	@docker ps -a | grep data_access_layer | awk ' {print $1 } ' | xargs docker rm
+	@docker ps -a | awk ' {print $1 } ' | xargs docker rm
 
 status:
 	@docker ps -a
@@ -36,3 +36,11 @@ protofile:
 
 gitlog:
 	git log --graph --oneline --decorate --all
+
+clean:
+	{ \
+		make stop; \
+		make rm; \
+		make force; \
+		make status; \
+	}

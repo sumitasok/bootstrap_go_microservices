@@ -3,7 +3,7 @@ version: '3.1'
 services:
 
   db:
-    image: postgres
+    image: postgres:10
     restart: always
     volumes:
       - "${DB_POSTGRES_PATH}:/var/lib/postgresql/data"
@@ -25,7 +25,7 @@ services:
   web_server:
     build:
       context: .
-      dockerfile: server.Dockerfile
+      dockerfile: Dockerfiles/server.Dockerfile
     ports:
       - "9000:9000"
     depends_on:
@@ -34,7 +34,7 @@ services:
   web_client:
     build:
       context: .
-      dockerfile: client.Dockerfile
+      dockerfile: Dockerfiles/client.Dockerfile
     depends_on:
       - db
       - web_server
@@ -42,6 +42,6 @@ services:
   connector:
     build:
       context: .
-      dockerfile: connector.Dockerfile
+      dockerfile: Dockerfiles/connector.Dockerfile
     depends_on:
       - db
