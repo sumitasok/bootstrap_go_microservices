@@ -10,6 +10,17 @@ Add this to you `.git/config` file
 
 Then do git merge commits from that remote.
 
+```
+git merge remotes/bootstrap/master
+```
+
+to initiate the application
+
+```
+make build
+```
+
+
 How to generate go files from proto files:
 We use proto compiler from this unofficial docker image from this [github repo](https://github.com/znly/docker-protobuf) forked over [here](https://github.com/go-get/docker-protobuf)
 
