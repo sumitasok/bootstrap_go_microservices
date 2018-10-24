@@ -1,8 +1,10 @@
+# https://stackoverflow.com/questions/10121182/multiline-bash-commands-in-makefile
 .PHONY: build run
 
 build:
-	{
-		docker build -t sql-migrate -f sql-migrate.Dockerfile .
+	{ \
+		docker build -t gotools -f gotools.Dockerfile . ;\
+		docker pull znly/protoc ;\
 	}
 
 run:
@@ -25,3 +27,9 @@ status:
 
 force:
 	@docker ps -a | grep Exited | awk '{print $1}' | xargs docker rm
+
+gotools:
+	docker run -it --rm -v `pwd`:/go/src/app gotools $(arg)
+
+make protofile:
+	docker run --rm -v `pwd`:`pwd` -w `pwd` znly/protoc --go_out=plugins=grpc:. -I. $(path)
