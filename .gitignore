@@ -1,4 +1,5 @@
 .vscode
-database/
+database
 .env
 *.db
+vendor

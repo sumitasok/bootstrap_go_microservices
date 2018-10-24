@@ -35,8 +35,13 @@ services:
     build:
       context: .
       dockerfile: client.Dockerfile
-    ports:
-      - "9001:9001"
     depends_on:
       - db
       - web_server
+
+  connector:
+    build:
+      context: .
+      dockerfile: connector.Dockerfile
+    depends_on:
+      - db

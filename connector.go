@@ -1,17 +1,11 @@
 package main
 
 import (
-	// "context"
-	"log"
-	"net"
+	"fmt" // "context"
 	"time"
 
-	"./data"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 const (
@@ -24,22 +18,18 @@ type Product struct {
 	Price uint
 }
 
-// server is used to implement helloworld.GreeterServer.
-type product_server struct{}
-
-// SayHello implements helloworld.GreeterServer
-func (s *product_server) Create(ctx context.Context, in *data.ProductRequest) (*data.ProductResponse, error) {
-	// To-Do: code to create the data.
-	return &data.ProductResponse{Code: "Hello " + in.Code}, nil
-}
-
 func main() {
 	// Docker need time to startup the database for the app to connect
 	// this needs to be hanlded in a better way.
 	// https://docs.docker.com/compose/startup-order/
-	time.Sleep(2 * time.Second)
+	time.Sleep(7 * time.Second)
 
-	db, err := gorm.Open("postgres", "host=db port=5432 user=in_user dbname=in_db password=in_password sslmode=disable")
+	config := readENV()
+
+	pgConnStr := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+		config.PG_HOST, config.PG_PORT, config.PG_USER, config.PG_DBNAME, config.PG_PASSWORD, config.PG_SSLMODE)
+
+	db, err := gorm.Open("postgres", pgConnStr)
 	if err != nil {
 		print(err.Error())
 		panic("failed to connect database")
@@ -62,17 +52,24 @@ func main() {
 
 	// Delete - delete product
 	db.Delete(&product)
+}
 
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+func readENV() *Config {
+	return &Config{
+		PG_HOST:     "db",
+		PG_PORT:     "5432",
+		PG_USER:     "in_user",
+		PG_DBNAME:   "in_db",
+		PG_PASSWORD: "in_password",
+		PG_SSLMODE:  "disable",
 	}
+}
 
-	s := grpc.NewServer()
-	data.RegisterGreeterServer(s, &product_server)
-	// Register reflection service on gRPC server.
-	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
+type Config struct {
+	PG_HOST     string
+	PG_PORT     string
+	PG_USER     string
+	PG_DBNAME   string
+	PG_PASSWORD string
+	PG_SSLMODE  string
 }

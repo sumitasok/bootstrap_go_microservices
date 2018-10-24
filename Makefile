@@ -1,7 +1,9 @@
 .PHONY: build run
 
 build:
-	@docker build -t my-golang-app .
+	{
+		docker build -t sql-migrate -f sql-migrate.Dockerfile .
+	}
 
 run:
 	@docker run -it --rm -p 9000:9000 --name my-running-app my-golang-app
@@ -20,3 +22,6 @@ rm:
 
 status:
 	@docker ps -a
+
+force:
+	@docker ps -a | grep Exited | awk '{print $1}' | xargs docker rm
